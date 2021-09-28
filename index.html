@@ -130,28 +130,28 @@
   <main id="game">
   </main>
   <script>
-    const directory = 'img';
+    const directory = 'https://github.com/JuanDAC/focus_with_festivals_one_file/raw/main/img';
     const $game = document.querySelector('#game');
     const unorder = [];
     const position = () => (Math.round(Math.random())) ? 'afterbegin' : 'beforeend';
     const cats = [
       {
-        dir: `/${directory}/carnaval-de-barranquilla_2.jpg`,
+        dir: `${directory}/carnaval-de-barranquilla_2.jpg`,
         message: 'Carnaval de Barranquilla',
         location: 'Barranquilla'
       },
       {
-        dir: `/${directory}/carnaval_de_negros_y_blancos.jpg`,
+        dir: `${directory}/carnaval_de_negros_y_blancos.jpg`,
         message: 'Carnaval de blancos y negros',
         location: 'Pasto'
       },
       {
-        dir: `/${directory}/feria_de_la_salsa.jpeg`,
+        dir: `${directory}/feria_de_la_salsa.jpeg`,
         message: 'Feria de la Salsa',
         location: 'Cali'
       },
       {
-        dir: `/${directory}/feria_san_pedro.jpg`,
+        dir: `${directory}/feria_san_pedro.jpg`,
         message: 'Festival de San Pedro',
         location: 'Huila'
       },
