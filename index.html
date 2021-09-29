@@ -34,6 +34,8 @@
       color: #DED9FF;
       align-items: end;
       transition: all 300ms;
+      transform-style: preserve-3d;
+      transform-origin: center;
       backface-visibility: visible;
     }
 
@@ -108,7 +110,6 @@
 
     .active {
       transform: perspective(50vmax) rotatey(180deg);
-      transform-style: preserve-3d;
     }
 
     *[data-assert] {
@@ -119,6 +120,7 @@
       from {
         transform: scale(1.02);
       }
+
       to {
         transform: scale(0.99);
       }
@@ -182,23 +184,40 @@
       });
 
       let event = false;
-      unorder.forEach(($cart, index, array) => $cart.addEventListener('click', ({ target: $element }) => {
-        if (event)
+      unorder.forEach(($element, index, array) => $element.addEventListener('click', () => {
+
+        const delay = 450;
+
+        if (event) {
           return;
+        }
+
         event = true;
-        while (!$element?.classList?.contains('cart')) {
-          $element = $element.parentNode;
+
+        if (!($element instanceof HTMLElement)) {
+          event = false;
+          return;
         }
-        const prevActive = array.filter(e => !e.classList.contains('active') && !e.getAttribute('data-assert'));
-        if (prevActive.length && [false, ...prevActive].reduce((acum, item) => acum || item === $element)) {
+
+        const prevActive = array.filter(
+          e => !e.classList.contains('active')
+            && !e.getAttribute('data-assert')
+        );
+
+        if (
+          prevActive.length
+          && [false, ...prevActive].reduce((acum, item) => acum || item === $element)
+        ) {
           $element.classList.toggle('active');
-          event = false;
+          setTimeout(() => event = false, delay);
           return;
         }
+
         if ($element.getAttribute('data-assert')) {
-          event = false;
+          setTimeout(() => event = false, delay);
           return;
         }
+
         if (prevActive.length === 1) {
           const prevId = prevActive[0].getAttribute('data-item');
           const currentId = $element.getAttribute('data-item');
@@ -206,11 +225,16 @@
             $element.setAttribute('data-assert', true);
             prevActive[0].setAttribute('data-assert', true);
           }
-        } else if (prevActive.length >= 2) {
-          prevActive.forEach(e => e?.classList?.add('active'));
         }
-        $element.classList.toggle('active');
-        event = false;
+
+        if (prevActive.length >= 2) {
+          prevActive.forEach((e, i) => setTimeout(() => e?.classList?.add('active'), delay * (i + 1) ));
+        }
+
+        setTimeout(() => $element?.classList?.remove('active'), 0);
+
+        setTimeout(() => event = false, delay * (prevActive.length + 1));
+        
       }));
 
       unorder.sort(() => Math.random() - 0.5).forEach($element => $game.insertAdjacentElement(position(), $element));
